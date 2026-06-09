@@ -328,7 +328,7 @@ h1, h2, h3, h4, h5, h6 {
     background: var(--bg-secondary);
     border: 1px solid var(--border-color);
     border-radius: 16px;
-    padding: 30px;
+    padding: 20px;
     height: fit-content;
     position: sticky;
     top: 100px;
@@ -339,14 +339,14 @@ h1, h2, h3, h4, h5, h6 {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 30px;
+    margin-bottom: 16px;
 }
 
 .filter-header h3 {
-    font-size: 20px;
+    font-size: 16px;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
     color: var(--text-primary);
 }
 
@@ -365,17 +365,17 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .filter-group {
-    margin-bottom: 24px;
-    padding-bottom: 20px;
+    margin-bottom: 14px;
+    padding-bottom: 12px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.04);
 }
 
 .filter-group h4 {
-    font-size: 12px;
+    font-size: 11px;
     text-transform: uppercase;
-    letter-spacing: 1.5px;
+    letter-spacing: 1px;
     color: var(--accent-gold);
-    margin-bottom: 16px;
+    margin-bottom: 8px;
     font-weight: 600;
     font-family: 'Plus Jakarta Sans', sans-serif;
 }
@@ -385,10 +385,10 @@ h1, h2, h3, h4, h5, h6 {
     background: var(--bg-tertiary);
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 8px;
-    padding: 12px;
+    padding: 8px 12px;
     color: var(--text-primary);
     font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 13px;
+    font-size: 12px;
     cursor: pointer;
     transition: var(--transition-smooth);
 }
@@ -421,8 +421,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .slider-hint {
-    margin-top: 12px;
-    font-size: 12px;
+    margin-top: 6px;
+    font-size: 11px;
     color: var(--text-secondary);
     text-align: right;
 }
@@ -434,26 +434,26 @@ h1, h2, h3, h4, h5, h6 {
 
 .aurum-guarantee {
     display: flex;
-    gap: 12px;
+    gap: 8px;
     background: rgba(212, 175, 55, 0.03);
     border: 1px dashed rgba(212, 175, 55, 0.2);
-    padding: 16px;
+    padding: 10px 12px;
     border-radius: 8px;
-    margin-top: 20px;
+    margin-top: 12px;
 }
 
 .aurum-guarantee h5 {
     font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 600;
     color: var(--accent-gold);
-    margin-bottom: 4px;
+    margin-bottom: 2px;
 }
 
 .aurum-guarantee p {
-    font-size: 11px;
+    font-size: 10px;
     color: var(--text-secondary);
-    line-height: 1.4;
+    line-height: 1.3;
 }
 
 .gold-icon {
@@ -550,8 +550,8 @@ h1, h2, h3, h4, h5, h6 {
 .product-image-container {
     position: relative;
     width: 100%;
-    padding-top: 100%; /* 1:1 Kare Kutu */
-    background: #000;
+    padding-top: 80%; /* Shorter aspect ratio to fit grid elegantly */
+    background: #0b0c10;
     overflow: hidden;
     border-bottom: 1px solid rgba(255, 255, 255, 0.03);
 }
@@ -563,7 +563,7 @@ h1, h2, h3, h4, h5, h6 {
     width: 100%;
     height: 100%;
     object-fit: contain;
-    padding: 16px;
+    padding: 24px; /* More padding shrinks the images to give breathing room */
     transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 

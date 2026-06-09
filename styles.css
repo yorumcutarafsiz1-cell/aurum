@@ -277,10 +277,17 @@ h1, h2, h3, h4, h5, h6 {
     display: flex;
     justify-content: center;
     gap: 16px;
-    margin-bottom: 50px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    padding-bottom: 20px;
+    margin-bottom: 40px;
+    border-bottom: 1px solid var(--border-color);
+    padding: 16px 20px;
     overflow-x: auto;
+    position: sticky;
+    top: 108px; /* Desktop navbar bottom */
+    z-index: 900;
+    background: rgba(38, 42, 53, 0.88); /* Matches glass-bg for translucent floating feel */
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    transition: var(--transition-smooth);
 }
 
 .tab-btn {
@@ -1486,7 +1493,8 @@ h1, h2, h3, h4, h5, h6 {
         order: 2;
         margin-bottom: 24px;
         justify-content: flex-start;
-        padding-bottom: 10px;
+        padding: 12px 16px;
+        top: 142px; /* Sticky top matching mobile wrapped header height */
     }
     
     .catalog-layout {
@@ -1809,5 +1817,50 @@ body:hover .cursor-glow {
 
 .sales-notif-close:hover {
     color: var(--accent-gold);
+}
+
+/* 4. Floating Back to Top Button */
+.back-to-top {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 46px;
+    height: 46px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    color: var(--accent-gold);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 1500;
+    opacity: 0;
+    pointer-events: none;
+    transition: var(--transition-smooth);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.back-to-top.visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.back-to-top:hover {
+    background: var(--accent-gold);
+    color: #000;
+    border-color: var(--accent-gold);
+    box-shadow: 0 4px 25px rgba(212, 175, 55, 0.45);
+    transform: translateY(-4px);
+}
+
+@media (max-width: 600px) {
+    .back-to-top {
+        bottom: 80px; /* Position above mobile notifications */
+        right: 16px;
+        width: 40px;
+        height: 40px;
+        font-size: 14px;
+    }
 }
 

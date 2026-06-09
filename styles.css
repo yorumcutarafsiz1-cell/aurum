@@ -1,24 +1,24 @@
-/* AURUM Lüks Arayüz Tasarım Sistemi (Obsidyen & Altın Cam Tasarımı) */
+/* AURUM Modern Metallic Dark Luxury Design System */
 
 :root {
-    --bg-primary: #050505;
-    --bg-secondary: #0d0d0d;
-    --bg-tertiary: #141414;
+    --bg-primary: #121316;
+    --bg-secondary: #1a1c22;
+    --bg-tertiary: #252830;
     --accent-gold: #d4af37;
     --accent-gold-rgb: 212, 175, 55;
-    --accent-gold-hover: #f3e5ab;
-    --text-primary: #ffffff;
-    --text-secondary: #a8a8a8;
-    --text-muted: #666666;
-    --border-color: rgba(212, 175, 55, 0.15);
-    --border-glow: rgba(212, 175, 55, 0.35);
-    --glass-bg: rgba(13, 13, 13, 0.75);
-    --glass-border: rgba(255, 255, 255, 0.04);
-    --shadow-gold: 0 8px 32px 0 rgba(212, 175, 55, 0.08);
+    --accent-gold-hover: #f5d77f;
+    --text-primary: #f5f6fa;
+    --text-secondary: #a0a5b5;
+    --text-muted: #6b7082;
+    --border-color: rgba(255, 255, 255, 0.06);
+    --border-glow: rgba(212, 175, 55, 0.25);
+    --glass-bg: rgba(26, 28, 34, 0.85);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --shadow-gold: 0 12px 40px 0 rgba(0, 0, 0, 0.35);
     --transition-smooth: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
-/* Global Sıfırlamalar ve Yapı */
+/* Global Reset and Structure */
 * {
     margin: 0;
     padding: 0;
@@ -27,7 +27,7 @@
 }
 
 body {
-    background-color: var(--bg-primary);
+    background: linear-gradient(135deg, #2c2e37 0%, #17181e 50%, #0a0b0d 100%) fixed;
     color: var(--text-primary);
     font-family: 'Plus Jakarta Sans', sans-serif;
     overflow-x: hidden;
@@ -35,9 +35,9 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-    font-family: 'Playfair Display', serif;
-    font-weight: 500;
-    letter-spacing: 0.5px;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 600;
+    letter-spacing: 1.2px;
 }
 
 /* Özel Scrollbar */
@@ -188,7 +188,7 @@ h1, h2, h3, h4, h5, h6 {
     align-items: center;
     justify-content: center;
     text-align: center;
-    background: radial-gradient(circle at center, #181510 0%, #050505 80%);
+    background: radial-gradient(circle at center, #353846 0%, #17181e 80%);
     padding: 0 20px;
     margin-top: 76px;
     border-bottom: 1px solid var(--border-color);

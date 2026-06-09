@@ -1,7 +1,6 @@
-// AURUM Lüks Pazaryeri Uygulama Mantığı (Vanilla JS)
+// AURUM Exclusive Luxury Marketplace Logic (Vanilla JS)
 
-// --- Supabase Yapılandırması ---
-// Veritabanı bağlantısı kurmak istediğinizde burayı kendi bilgilerinizle doldurabilirsiniz.
+// --- Supabase Configuration ---
 const SUPABASE_URL = "";
 const SUPABASE_ANON_KEY = "";
 
@@ -9,13 +8,13 @@ let supabaseClient = null;
 if (SUPABASE_URL && SUPABASE_ANON_KEY && typeof supabase !== 'undefined') {
     try {
         supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        console.log("[AURUM] Supabase bağlantısı kuruldu.");
+        console.log("[AURUM] Connected to Supabase.");
     } catch (e) {
-        console.warn("[AURUM] Supabase başlatılamadı, yerel JSON moduna geçiliyor:", e);
+        console.warn("[AURUM] Supabase initialization failed, switching to local JSON mode:", e);
     }
 }
 
-// Global Durum Yönetimi (State)
+// Global State Management
 let allProducts = [];
 let filteredProducts = [];
 let cart = [];
@@ -24,7 +23,7 @@ let activeVertical = "all";
 let currentImageIndex = 0;
 let activeProduct = null;
 
-// Filtre Seçenekleri Durumu
+// Filter Options State
 const currentFilters = {
     search: "",
     priceLimit: 12000000,
@@ -35,7 +34,7 @@ const currentFilters = {
     sort: "price-desc"
 };
 
-// DOM Elemanları
+// DOM Elements
 const productsGrid = document.getElementById("products-grid");
 const productCountLabel = document.getElementById("product-count-label");
 const globalSearch = document.getElementById("global-search");
@@ -50,7 +49,7 @@ const sortSelect = document.getElementById("sort-select");
 const clearFiltersBtn = document.getElementById("clear-filters-btn");
 const categoryTabs = document.querySelectorAll(".category-tabs .tab-btn");
 
-// Sepet DOM Elemanları
+// Cart DOM Elements
 const cartBtn = document.getElementById("cart-btn");
 const cartDrawer = document.getElementById("cart-drawer");
 const cartDrawerClose = document.getElementById("cart-drawer-close");
@@ -61,7 +60,7 @@ const cartCountBadge = document.getElementById("cart-count");
 const favCountBadge = document.getElementById("fav-count");
 const checkoutBtn = document.getElementById("checkout-btn");
 
-// Ödeme DOM Elemanları
+// Checkout DOM Elements
 const checkoutDrawer = document.getElementById("checkout-drawer");
 const checkoutDrawerClose = document.getElementById("checkout-drawer-close");
 const checkoutForm = document.getElementById("checkout-form");
@@ -72,7 +71,7 @@ const successOrderId = document.getElementById("success-order-id");
 const successOrderTotal = document.getElementById("success-order-total");
 const successContinueBtn = document.getElementById("success-continue-btn");
 
-// Detay Modalı DOM Elemanları
+// Detail Modal DOM Elements
 const productModal = document.getElementById("product-modal");
 const modalCloseBtn = document.getElementById("modal-close");
 const modalMainImg = document.getElementById("modal-main-img");
@@ -87,13 +86,13 @@ const modalDescription = document.getElementById("modal-description");
 const modalSpecsTable = document.getElementById("modal-specs-table");
 const modalAddToCartBtn = document.getElementById("modal-add-to-cart");
 
-// --- 1. Veri Yükleme ve Başlangıç ---
+// --- 1. Data Loading and Initializers ---
 document.addEventListener("DOMContentLoaded", () => {
     loadProducts();
     setupEventListeners();
     loadLocalCart();
     
-    // Fare Takipçisi Altın Işıltı
+    // Mouse Tracker Gold Glow
     const cursorGlow = document.getElementById("cursor-glow");
     document.addEventListener("mousemove", (e) => {
         if (cursorGlow) {
@@ -108,9 +107,9 @@ async function loadProducts() {
     try {
         let data = [];
         
-        // Supabase bağlantısı aktifse veritabanından çek
+        // Fetch from database if Supabase connection is active
         if (supabaseClient) {
-            console.log("[AURUM] Supabase veritabanından veri çekiliyor...");
+            console.log("[AURUM] Fetching data from Supabase database...");
             const { data: dbData, error } = await supabaseClient
                 .from("products")
                 .select("*")
@@ -120,9 +119,9 @@ async function loadProducts() {
             data = dbData;
         }
         
-        // Supabase boş veya başarısızsa yerel JSON fallback'ini kullan
+        // Use local JSON fallback if Supabase is empty or failed
         if (!data || data.length === 0) {
-            console.log("[AURUM] Supabase boş veya devre dışı, yerel products.json çekiliyor...");
+            console.log("[AURUM] Supabase empty or disabled, pulling local products.json...");
             const response = await fetch("scraper/products.json");
             data = await response.json();
         }
@@ -130,21 +129,21 @@ async function loadProducts() {
         allProducts = data;
         filteredProducts = [...allProducts];
         
-        // Filtre dropdown seçeneklerini dinamik doldur
+        // Populate filter dropdowns dynamically
         populateFilterDropdowns();
         
-        // Ürünleri listele
+        // Render products
         renderProducts();
         
-        // Canlı satış popuplarını başlat
+        // Start live sales notifications loop
         startSalesNotifications();
         
     } catch (error) {
-        console.error("[AURUM] Veri yüklenirken hata oluştu:", error);
+        console.error("[AURUM] Error loading products:", error);
         productsGrid.innerHTML = `
             <div class="loader-container">
                 <i class="fa-solid fa-triangle-exclamation" style="font-size: 40px; color: #ff6b6b;"></i>
-                <p>Ürünler yüklenirken bir hata oluştu. Lütfen scraper'ın çalışıp 'scraper/products.json' dosyasını ürettiğinden emin olun.</p>
+                <p>An error occurred while loading products. Please make sure the scraper has run and generated 'scraper/products.json'.</p>
             </div>
         `;
     }
@@ -154,12 +153,12 @@ function showLoader() {
     productsGrid.innerHTML = `
         <div class="loader-container">
             <div class="aurum-spinner"></div>
-            <p>Nadir eserler yükleniyor...</p>
+            <p>Loading rare masterpieces...</p>
         </div>
     `;
 }
 
-// --- 2. Filtreleri Doldurma Mantığı ---
+// --- 2. Dynamic Filters Population ---
 function populateFilterDropdowns() {
     const creators = new Set();
     const styles = new Set();
@@ -168,10 +167,10 @@ function populateFilterDropdowns() {
     let maxPrice = 12000000;
 
     allProducts.forEach(p => {
-        // Fiyat limitlerini belirle
+        // Determine price limits
         if (p.price > maxPrice) maxPrice = Math.ceil(p.price);
         
-        // Özellikleri ayrıştır
+        // Parse specifications
         const specs = p.specs || {};
         if (specs["Creator"]) creators.add(specs["Creator"]);
         if (specs["Style"]) styles.add(specs["Style"]);
@@ -179,14 +178,14 @@ function populateFilterDropdowns() {
         if (specs["Place of Origin"]) origins.add(specs["Place of Origin"]);
     });
 
-    // Slider'ı dinamik olarak maksimum fiyata çek
+    // Adjust slider dynamically to maximum price
     priceSlider.max = maxPrice;
     priceSlider.value = maxPrice;
     currentFilters.priceLimit = maxPrice;
     priceMaxLabel.textContent = formatCurrency(maxPrice);
     currentPriceLimitLabel.textContent = formatCurrency(maxPrice);
 
-    // Dropdownları doldur
+    // Populate selects
     fillSelect(creatorSelect, creators);
     fillSelect(styleSelect, styles);
     fillSelect(periodSelect, periods);
@@ -194,10 +193,10 @@ function populateFilterDropdowns() {
 }
 
 function fillSelect(selectElement, itemsSet) {
-    // İlk "Tümü" seçeneği hariç temizle
-    selectElement.innerHTML = '<option value="all">Tümü</option>';
+    // Clear everything except the first option "All"
+    selectElement.innerHTML = '<option value="all">All</option>';
     
-    // Sıralı dizi yapıp ekleyelim
+    // Sort and append items
     Array.from(itemsSet).sort().forEach(item => {
         if (!item) return;
         const opt = document.createElement("option");
@@ -207,25 +206,25 @@ function fillSelect(selectElement, itemsSet) {
     });
 }
 
-// --- 3. Ürün Listeleme (Render) ---
+// --- 3. Render Products Grid ---
 function renderProducts() {
     if (filteredProducts.length === 0) {
         productsGrid.innerHTML = `
             <div class="loader-container">
                 <i class="fa-solid fa-hourglass-empty" style="font-size: 40px; color: var(--accent-gold);"></i>
-                <p>Aradığınız kriterlere uygun eser bulunamadı. Lütfen filtrelerinizi gevşetin.</p>
+                <p>No masterpieces found matching your criteria. Please adjust your filters.</p>
             </div>
         `;
-        productCountLabel.textContent = "0 Başyapıt Gösteriliyor";
+        productCountLabel.textContent = "0 Masterpieces Shown";
         return;
     }
 
-    productCountLabel.textContent = `${filteredProducts.length} Seçkin Eser Gösteriliyor`;
+    productCountLabel.textContent = `${filteredProducts.length} Exquisite Masterpieces Shown`;
     productsGrid.innerHTML = "";
 
     filteredProducts.forEach(product => {
         const specs = product.specs || {};
-        const creator = specs["Creator"] || "Bilinmiyor";
+        const creator = specs["Creator"] || "Unknown";
         const origin = specs["Place of Origin"] || "";
         const isFav = favorites.has(product.id) ? "active" : "";
         const originalPriceVal = product.original_price || (product.price / 1.15);
@@ -234,10 +233,10 @@ function renderProducts() {
         card.className = "product-card";
         card.setAttribute("data-id", product.id);
         
-        // Kart içeriği
+        // Card content
         card.innerHTML = `
             <div class="product-image-container">
-                <button class="favorite-card-btn ${isFav}" data-id="${product.id}" title="Favorilere Ekle">
+                <button class="favorite-card-btn ${isFav}" data-id="${product.id}" title="Add to Favorites">
                     <i class="fa-solid fa-heart"></i>
                 </button>
                 <img src="${product.images && product.images.length > 0 ? product.images[0] : 'placeholder.jpg'}" alt="${product.title}" loading="lazy">
@@ -252,13 +251,13 @@ function renderProducts() {
             </div>
         `;
         
-        // Tıklama olayları (Favori hariç karta tıklanınca detay aç)
+        // Click events
         card.addEventListener("click", (e) => {
             if (e.target.closest(".favorite-card-btn")) return;
             openProductDetail(product);
         });
 
-        // Favori tıklandığında
+        // Favorite button click
         const favBtn = card.querySelector(".favorite-card-btn");
         favBtn.addEventListener("click", (e) => {
             e.stopPropagation();
@@ -270,12 +269,12 @@ function renderProducts() {
     });
 }
 
-// --- 4. Filtreleme ve Sıralama Algoritması ---
+// --- 4. Filtering and Sorting Logic ---
 function filterAndSortProducts() {
     filteredProducts = allProducts.filter(p => {
         const specs = p.specs || {};
         
-        // 1. Kategori Dikey Filtresi (furniture, art, jewelry, fashion vb.)
+        // 1. Category Vertical Filter
         if (activeVertical !== "all") {
             const prodVert = (p.vertical || "").toLowerCase();
             const activeV = activeVertical.toLowerCase();
@@ -286,7 +285,7 @@ function filterAndSortProducts() {
             if (activeV === "other" && ["furniture", "jewelry", "art"].includes(prodVert)) return false;
         }
 
-        // 2. Arama Filtresi (Başlık, Açıklama, Tasarımcı)
+        // 2. Search Filter (Title, Description, Creator, Style)
         if (currentFilters.search) {
             const query = currentFilters.search.toLowerCase();
             const titleMatch = (p.title || "").toLowerCase().includes(query);
@@ -296,25 +295,25 @@ function filterAndSortProducts() {
             if (!titleMatch && !descMatch && !creatorMatch && !styleMatch) return false;
         }
 
-        // 3. Fiyat Sınırı
+        // 3. Price Filter
         if (p.price > currentFilters.priceLimit) return false;
 
-        // 4. Tasarımcı Filtresi
+        // 4. Creator Filter
         if (currentFilters.creator !== "all" && specs["Creator"] !== currentFilters.creator) return false;
 
-        // 5. Stil Filtresi
+        // 5. Style Filter
         if (currentFilters.style !== "all" && specs["Style"] !== currentFilters.style) return false;
 
-        // 6. Dönem Filtresi
+        // 6. Period Filter
         if (currentFilters.period !== "all" && specs["Period"] !== currentFilters.period) return false;
 
-        // 7. Menşei Filtresi
+        // 7. Place of Origin Filter
         if (currentFilters.origin !== "all" && specs["Place of Origin"] !== currentFilters.origin) return false;
 
         return true;
     });
 
-    // Sıralama
+    // Sorting
     if (currentFilters.sort === "price-desc") {
         filteredProducts.sort((a, b) => b.price - a.price);
     } else if (currentFilters.sort === "price-asc") {
@@ -326,15 +325,15 @@ function filterAndSortProducts() {
     renderProducts();
 }
 
-// --- 5. Olay Dinleyicileri (Event Listeners) ---
+// --- 5. Event Listeners ---
 function setupEventListeners() {
-    // Arama Çubuğu
+    // Search input
     globalSearch.addEventListener("input", (e) => {
         currentFilters.search = e.target.value.trim();
         filterAndSortProducts();
     });
 
-    // Fiyat Slider
+    // Price slider
     priceSlider.addEventListener("input", (e) => {
         const val = parseInt(e.target.value);
         currentFilters.priceLimit = val;
@@ -342,7 +341,7 @@ function setupEventListeners() {
         filterAndSortProducts();
     });
 
-    // Dropdown filtreler
+    // Select filters
     creatorSelect.addEventListener("change", (e) => {
         currentFilters.creator = e.target.value;
         filterAndSortProducts();
@@ -360,13 +359,13 @@ function setupEventListeners() {
         filterAndSortProducts();
     });
 
-    // Sıralama
+    // Sort select
     sortSelect.addEventListener("change", (e) => {
         currentFilters.sort = e.target.value;
         filterAndSortProducts();
     });
 
-    // Filtreleri Temizle
+    // Clear filters
     clearFiltersBtn.addEventListener("click", () => {
         globalSearch.value = "";
         currentFilters.search = "";
@@ -387,7 +386,7 @@ function setupEventListeners() {
         filterAndSortProducts();
     });
 
-    // Kategori Tab Değişimi
+    // Category tabs
     categoryTabs.forEach(tab => {
         tab.addEventListener("click", () => {
             categoryTabs.forEach(t => t.classList.remove("active"));
@@ -397,17 +396,17 @@ function setupEventListeners() {
         });
     });
 
-    // Sepet Aç/Kapat
+    // Cart Drawer Toggle
     cartBtn.addEventListener("click", () => cartDrawer.classList.add("active"));
     cartDrawerClose.addEventListener("click", () => cartDrawer.classList.remove("active"));
     cartDrawer.addEventListener("click", (e) => {
         if (e.target === cartDrawer) cartDrawer.classList.remove("active");
     });
 
-    // Ödeme Ekranı Aç/Kapat
+    // Checkout Drawer Toggle
     checkoutBtn.addEventListener("click", () => {
         if (cart.length === 0) {
-            alert("Sepetiniz boş!");
+            alert("Your cart is empty!");
             return;
         }
         cartDrawer.classList.remove("active");
@@ -418,18 +417,18 @@ function setupEventListeners() {
         if (e.target === checkoutDrawer) checkoutDrawer.classList.remove("active");
     });
 
-    // Ödeme Formu Gönderimi
+    // Checkout Form Submit
     checkoutForm.addEventListener("submit", (e) => {
         e.preventDefault();
         processCheckout();
     });
 
-    // Başarı Modalı Kapat
+    // Success Modal Close
     successContinueBtn.addEventListener("click", () => {
         successModal.classList.remove("active");
     });
 
-    // Detay Modalı Kapat
+    // Detail Modal Close
     modalCloseBtn.addEventListener("click", () => {
         productModal.classList.remove("active");
         activeProduct = null;
@@ -441,17 +440,16 @@ function setupEventListeners() {
         }
     });
 
-    // Modal Galeri Navigasyonu
+    // Gallery navigation
     modalPrevBtn.addEventListener("click", () => navigateGallery(-1));
     modalNextBtn.addEventListener("click", () => navigateGallery(1));
 
-    // Modal Sepete Ekle
+    // Modal Add To Cart
     modalAddToCartBtn.addEventListener("click", () => {
         if (activeProduct) {
             addToCart(activeProduct);
-            // Küçük animasyon bildirimi
             const origText = modalAddToCartBtn.innerHTML;
-            modalAddToCartBtn.innerHTML = '<i class="fa-solid fa-check"></i> SEPETE EKLENDİ';
+            modalAddToCartBtn.innerHTML = '<i class="fa-solid fa-check"></i> ADDED TO CART';
             modalAddToCartBtn.style.background = "#2ecc71";
             setTimeout(() => {
                 modalAddToCartBtn.innerHTML = origText;
@@ -460,32 +458,31 @@ function setupEventListeners() {
         }
     });
 
-    // Hero Scroll Butonu
+    // Hero scroll button
     document.getElementById("scroll-to-catalog").addEventListener("click", () => {
         document.getElementById("catalog-section").scrollIntoView({ behavior: "smooth" });
     });
 }
 
-// --- 6. Gelişmiş Galeri ve Detay Görünümü ---
+// --- 6. Product Details and Gallery ---
 function openProductDetail(product) {
     activeProduct = product;
     currentImageIndex = 0;
     
-    // Detay Modalını Doldur
+    // Fill detail modal content
     modalVertical.textContent = (product.vertical || "Masterpiece").toUpperCase();
     modalTitle.textContent = product.title;
     modalPrice.textContent = formatCurrency(product.price);
     
     const originalPriceVal = product.original_price || (product.price / 1.15);
-    modalOriginalPrice.textContent = `Piyasa Değeri: ${formatCurrency(originalPriceVal)}`;
+    modalOriginalPrice.textContent = `Market Value: ${formatCurrency(originalPriceVal)}`;
     
-    modalDescription.textContent = product.description || "Bu seçkin esere ait özel bir açıklama bulunmamaktadır.";
+    modalDescription.textContent = product.description || "No description is available for this exquisite masterpiece.";
     
-    // Özellikler Tablosunu oluştur
+    // Fill specifications table
     modalSpecsTable.innerHTML = "";
     const specs = product.specs || {};
     
-    // Göstermek istediğimiz özel anahtarlar sırasıyla
     const specKeysToShow = [
         "Creator", "Dimensions", "Style", "Materials and Techniques", 
         "Place of Origin", "Period", "Date of Manufacture", "Condition", "Seller Location", "Reference Number"
@@ -496,14 +493,7 @@ function openProductDetail(product) {
         let val = specs[key];
         if (val) {
             const tr = document.createElement("tr");
-            
-            // Eğer dizi ise virgülle birleştirerek göster
-            let displayVal = "";
-            if (Array.isArray(val)) {
-                displayVal = val.join(", ");
-            } else {
-                displayVal = val;
-            }
+            let displayVal = Array.isArray(val) ? val.join(", ") : val;
             
             tr.innerHTML = `
                 <td>${translateSpecKey(key)}</td>
@@ -514,7 +504,6 @@ function openProductDetail(product) {
         }
     });
 
-    // Eğer hiç spesifikasyon eşleşmediyse tüm listeyi yazdır
     if (specCount === 0) {
         for (let key in specs) {
             const tr = document.createElement("tr");
@@ -525,24 +514,23 @@ function openProductDetail(product) {
         }
     }
 
-    // Galeri Resimlerini Ayarla
+    // Set Gallery Images
     const images = product.images || [];
     if (images.length > 0) {
         modalMainImg.src = images[0];
         
-        // Thumbnail'ları yükle
+        // Thumbnails list
         modalThumbnails.innerHTML = "";
         images.forEach((img, idx) => {
             const thumb = document.createElement("div");
             thumb.className = `thumbnail ${idx === 0 ? 'active' : ''}`;
-            thumb.innerHTML = `<img src="${img}" alt="Görsel ${idx + 1}">`;
+            thumb.innerHTML = `<img src="${img}" alt="Gallery ${idx + 1}">`;
             thumb.addEventListener("click", () => {
                 setMainImage(idx);
             });
             modalThumbnails.appendChild(thumb);
         });
 
-        // Navigasyon butonlarını göster/gizle
         if (images.length > 1) {
             modalPrevBtn.style.display = "flex";
             modalNextBtn.style.display = "flex";
@@ -557,7 +545,7 @@ function openProductDetail(product) {
         modalNextBtn.style.display = "none";
     }
 
-    // Modalı Aç
+    // Show modal
     productModal.classList.add("active");
 }
 
@@ -567,7 +555,6 @@ function setMainImage(index) {
     currentImageIndex = index;
     modalMainImg.src = activeProduct.images[index];
     
-    // Thumbnail aktif durumunu güncelle
     const thumbs = modalThumbnails.querySelectorAll(".thumbnail");
     thumbs.forEach((t, idx) => {
         if (idx === index) {
@@ -590,22 +577,11 @@ function navigateGallery(direction) {
 }
 
 function translateSpecKey(key) {
-    const translations = {
-        "Creator": "Tasarımcı / Yaratıcı",
-        "Dimensions": "Boyutlar",
-        "Style": "Stil / Tarz",
-        "Materials and Techniques": "Malzeme & Teknik",
-        "Place of Origin": "Menşei (Ülke)",
-        "Period": "Dönem",
-        "Date of Manufacture": "Üretim Tarihi",
-        "Condition": "Durum Raporu",
-        "Seller Location": "Galerici Konumu",
-        "Reference Number": "Referans Kodu"
-    };
-    return translations[key] || key;
+    // Scraped keys are already in English. Let's return them cleanly
+    return key;
 }
 
-// --- 7. Sepet Yönetimi Mantığı ---
+// --- 7. Cart Management ---
 function addToCart(product) {
     const existing = cart.find(item => item.product.id === product.id);
     if (existing) {
@@ -641,19 +617,16 @@ function updateCartBadge() {
     const totalQty = cart.reduce((acc, item) => acc + item.quantity, 0);
     cartCountBadge.textContent = totalQty;
     
-    // Sıfırsa gizleme/efekt ekleme
     if (totalQty === 0) {
         cartCountBadge.style.display = "none";
     } else {
         cartCountBadge.style.display = "flex";
-        // Küçük titreşim efekti
         cartCountBadge.parentElement.classList.add("pulse");
         setTimeout(() => cartCountBadge.parentElement.classList.remove("pulse"), 300);
     }
 }
 
 function saveCartAndRender() {
-    // LocalStorage kaydı
     localStorage.setItem("aurum_cart", JSON.stringify(cart));
     renderCart();
 }
@@ -675,8 +648,8 @@ function renderCart() {
         cartItemsContainer.innerHTML = `
             <div class="empty-cart-state">
                 <i class="fa-solid fa-bag-shopping"></i>
-                <p>Sepetiniz şu anda boş.</p>
-                <p style="font-size: 12px; color: var(--text-muted);">Sıradışı koleksiyonumuzdan nadide parçalar ekleyerek başlayın.</p>
+                <p>Your cart is empty.</p>
+                <p style="font-size: 12px; color: var(--text-muted);">Start by adding exquisite pieces from our collection.</p>
             </div>
         `;
         cartSubtotal.textContent = "$0";
@@ -707,12 +680,12 @@ function renderCart() {
                     <button class="qty-btn inc-btn" data-id="${p.id}"><i class="fa-solid fa-plus"></i></button>
                 </div>
             </div>
-            <button class="cart-item-remove" data-id="${p.id}" title="Sepetten Çıkar">
+            <button class="cart-item-remove" data-id="${p.id}" title="Remove from Cart">
                 <i class="fa-regular fa-trash-can"></i>
             </button>
         `;
 
-        // Buton olayları
+        // Event listeners
         cartItemDiv.querySelector(".dec-btn").addEventListener("click", () => updateCartQuantity(p.id, -1));
         cartItemDiv.querySelector(".inc-btn").addEventListener("click", () => updateCartQuantity(p.id, 1));
         cartItemDiv.querySelector(".cart-item-remove").addEventListener("click", () => removeFromCart(p.id));
@@ -724,25 +697,23 @@ function renderCart() {
     cartTotal.textContent = formatCurrency(subtotalVal);
 }
 
-// --- 8. Favoriler Mantığı ---
+// --- 8. Favorites ---
 function toggleFavorite(productId) {
     if (favorites.has(productId)) {
         favorites.delete(productId);
     } else {
         favorites.add(productId);
     }
-    
-    // Favori rozetini güncelle
     favCountBadge.textContent = favorites.size;
     favCountBadge.style.display = favorites.size === 0 ? "none" : "flex";
 }
 
-// --- 9. Güvenli Ödeme ve Simülasyon ---
+// --- 9. Checkout Simulation ---
 function openCheckout() {
     const totalQty = cart.reduce((acc, item) => acc + item.quantity, 0);
     const totalVal = cart.reduce((acc, item) => acc + (item.product.price * item.quantity), 0);
     
-    checkoutItemsCount.textContent = `${totalQty} Nadir Ürün`;
+    checkoutItemsCount.textContent = `${totalQty} Rare Piece` + (totalQty > 1 ? "s" : "");
     checkoutTotalPrice.textContent = formatCurrency(totalVal);
     
     checkoutDrawer.classList.add("active");
@@ -752,43 +723,39 @@ function processCheckout() {
     const payBtn = document.getElementById("place-order-btn");
     const origBtnText = payBtn.innerHTML;
     
-    // Butonu yükleniyor durumuna sok
     payBtn.disabled = true;
-    payBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> GÜVENLİ BANKA BAĞLANTISI KURULUYOR...';
+    payBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> ESTABLISHING SECURE BANK CONNECTION...';
     
     setTimeout(() => {
-        payBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> ÖDEME İŞLENİYOR...';
+        payBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> PROCESSING PAYMENT...';
         
         setTimeout(() => {
-            // Sepet değerlerini alıp sepeti sıfırla
             const totalVal = cart.reduce((acc, item) => acc + (item.product.price * item.quantity), 0);
             
-            // Sepeti Temizle
+            // Clear cart
             cart = [];
             saveCartAndRender();
             updateCartBadge();
             
-            // Çekmeceyi kapat
+            // Close drawer
             checkoutDrawer.classList.remove("active");
             payBtn.disabled = false;
             payBtn.innerHTML = origBtnText;
             
-            // Başarı Modalı Aç
+            // Show Success Modal
             const randomId = "AUR-" + Math.floor(1000000 + Math.random() * 9000000);
             successOrderId.textContent = "#" + randomId;
             successOrderTotal.textContent = formatCurrency(totalVal);
             successModal.classList.add("active");
             
-            // Formu sıfırla
             checkoutForm.reset();
             
         }, 1500);
     }, 1200);
 }
 
-// --- 10. Yardımcı Fonksiyonlar ---
+// --- 10. Helper Functions ---
 function formatCurrency(value) {
-    // USD formatında para birimi biçimlendirme
     return new Intl.NumberFormat('en-US', {
         style: 'currency',
         currency: 'USD',
@@ -797,34 +764,33 @@ function formatCurrency(value) {
     }).format(value);
 }
 
-// --- 11. Canlı Satış Popupları ve Sosyal Kanıt ---
+// --- 11. Live Sales Notifications Loops (Social Proof) ---
 function startSalesNotifications() {
     const notificationElement = document.getElementById("sales-notification");
     if (!notificationElement) return;
 
     const locations = [
-        "Londra, İngiltere", "Paris, Fransa", "New York, ABD", "Cenevre, İsviçre", 
-        "Tokyo, Japonya", "Milano, İtalya", "Monako", "Zürih, İsviçre", 
-        "Los Angeles, ABD", "Münih, Almanya", "Dubai, BAE", "İstanbul, Türkiye"
+        "London, UK", "Paris, France", "New York, USA", "Geneva, Switzerland", 
+        "Tokyo, Japan", "Milan, Italy", "Monaco", "Zurich, Switzerland", 
+        "Los Angeles, USA", "Munich, Germany", "Dubai, UAE", "Istanbul, Turkey"
     ];
 
     const actions = [
-        "bir koleksiyoner tarafından satın alındı.",
-        "koleksiyonuna eklenmek üzere rezerve edildi.",
-        "adına özel sigortalı kurye ile yola çıktı.",
-        "bir müşteri tarafından sepetine eklendi."
+        "was purchased by a collector.",
+        "was reserved for a private collection.",
+        "is on its way via secure courier.",
+        "was added to cart by a client."
     ];
 
     function showNotification() {
         if (allProducts.length === 0) return;
 
-        // Rastgele ürün seç
+        // Choose random product, location, action
         const product = allProducts[Math.floor(Math.random() * allProducts.length)];
         const location = locations[Math.floor(Math.random() * locations.length)];
         const action = actions[Math.floor(Math.random() * actions.length)];
-        const timeText = "Az önce";
+        const timeText = "Just now";
 
-        // Resim kontrolü
         const imgUrl = product.images && product.images.length > 0 ? product.images[0] : 'placeholder.jpg';
 
         notificationElement.innerHTML = `
@@ -833,16 +799,16 @@ function startSalesNotifications() {
             </div>
             <div class="sales-notif-info">
                 <div class="sales-notif-title">${product.title}</div>
-                <div class="sales-notif-text"><strong>${location}</strong> konumundan ${action}</div>
+                <div class="sales-notif-text">from <strong>${location}</strong> ${action}</div>
                 <span class="sales-notif-time">${timeText}</span>
             </div>
             <button class="sales-notif-close" id="sales-notif-close-btn">&times;</button>
         `;
 
-        // Göster
+        // Show toast
         notificationElement.classList.add("active");
 
-        // Kapatma butonu dinleyicisi
+        // Close button listener
         const closeBtn = notificationElement.querySelector("#sales-notif-close-btn");
         if (closeBtn) {
             closeBtn.addEventListener("click", () => {
@@ -850,16 +816,16 @@ function startSalesNotifications() {
             });
         }
 
-        // 6 saniye sonra otomatik gizle
+        // Auto hide after 6 seconds
         setTimeout(() => {
             notificationElement.classList.remove("active");
         }, 6000);
     }
 
-    // İlk bildirimi 5 saniye sonra göster
+    // First notification after 5 seconds
     setTimeout(() => {
         showNotification();
-        // Her 22 saniyede bir yeni bildirim göster
+        // Cycle every 22 seconds
         setInterval(showNotification, 22000);
     }, 5000);
 }

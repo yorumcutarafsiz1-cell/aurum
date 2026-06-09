@@ -462,6 +462,22 @@ function setupEventListeners() {
     document.getElementById("scroll-to-catalog").addEventListener("click", () => {
         document.getElementById("catalog-section").scrollIntoView({ behavior: "smooth" });
     });
+
+    // Mobile Filter Drawer Toggle
+    const mobileFilterBtn = document.getElementById("mobile-filter-btn");
+    const filterSidebar = document.querySelector(".filter-sidebar");
+    if (mobileFilterBtn && filterSidebar) {
+        mobileFilterBtn.addEventListener("click", () => {
+            filterSidebar.classList.toggle("active");
+            if (filterSidebar.classList.contains("active")) {
+                mobileFilterBtn.innerHTML = '<i class="fa-solid fa-xmark"></i> Close Filters';
+                mobileFilterBtn.classList.add("active");
+            } else {
+                mobileFilterBtn.innerHTML = '<i class="fa-solid fa-sliders"></i> Filter Options';
+                mobileFilterBtn.classList.remove("active");
+            }
+        });
+    }
 }
 
 // --- 6. Product Details and Gallery ---

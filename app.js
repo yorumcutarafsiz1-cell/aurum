@@ -227,7 +227,7 @@ function renderProducts() {
         const creator = specs["Creator"] || "Unknown";
         const origin = specs["Place of Origin"] || "";
         const isFav = favorites.has(product.id) ? "active" : "";
-        const originalPriceVal = product.original_price || (product.price / 1.15);
+        const originalPriceVal = product.price * 1.25;
         
         const card = document.createElement("div");
         card.className = "product-card";
@@ -474,7 +474,7 @@ function openProductDetail(product) {
     modalTitle.textContent = product.title;
     modalPrice.textContent = formatCurrency(product.price);
     
-    const originalPriceVal = product.original_price || (product.price / 1.15);
+    const originalPriceVal = product.price * 1.25;
     modalOriginalPrice.textContent = `Market Value: ${formatCurrency(originalPriceVal)}`;
     
     modalDescription.textContent = product.description || "No description is available for this exquisite masterpiece.";

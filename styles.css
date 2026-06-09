@@ -550,8 +550,8 @@ h1, h2, h3, h4, h5, h6 {
 .product-image-container {
     position: relative;
     width: 100%;
-    padding-top: 80%; /* Shorter aspect ratio to fit grid elegantly */
-    background: #0b0c10;
+    padding-top: 100%; /* 1:1 Square aspect ratio matches 1stDibs product photos perfectly */
+    background: #ffffff; /* White background blends seamlessly with product photo backgrounds */
     overflow: hidden;
     border-bottom: 1px solid rgba(255, 255, 255, 0.03);
 }
@@ -563,7 +563,7 @@ h1, h2, h3, h4, h5, h6 {
     width: 100%;
     height: 100%;
     object-fit: contain;
-    padding: 24px; /* More padding shrinks the images to give breathing room */
+    padding: 20px; /* Clean floating padding */
     transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
@@ -763,7 +763,7 @@ h1, h2, h3, h4, h5, h6 {
     position: relative;
     width: 100%;
     height: 450px;
-    background: #000;
+    background: #ffffff; /* White background blends seamlessly with details images */
     border-radius: 12px;
     overflow: hidden;
     border: 1px solid rgba(255, 255, 255, 0.02);
@@ -820,7 +820,7 @@ h1, h2, h3, h4, h5, h6 {
     width: 70px;
     height: 70px;
     border-radius: 8px;
-    background: #000;
+    background: #ffffff; /* White background for seamless thumbnails */
     border: 1px solid rgba(255, 255, 255, 0.08);
     overflow: hidden;
     cursor: pointer;

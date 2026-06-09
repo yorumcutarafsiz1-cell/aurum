@@ -1,0 +1,19 @@
+# Logs
+*.log
+
+# Dev/Scraper Temp Files
+detail_sample.html
+sample.html
+ldjson_0.json
+server_vars_full.json
+relay_item_debug.json
+detail_ldjson_*.json
+relay_snippet.json
+server_vars_keys.json
+
+# Local Environment Variables
+.env
+
+# OS Files
+.DS_Store
+Thumbs.db

@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AURUM | Exclusive Luxury Antiques & Masterpieces</title>
+    <!-- Meta Açıklamaları (SEO) -->
+    <meta name="description" content="Aurum, dünyanın en nadide antikalarını, tasarım mobilyalarını, güzel sanatlar eserlerini ve yüksek mücevherlerini sunan özel bir lüks pazaryeridir.">
+    <!-- Google Fonts: Playfair Display (Başlıklar) & Plus Jakarta Sans (Gövde) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome İkon Kütüphanesi -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- CSS Dosyamız -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- Fare Takipçisi Altın Işıltı -->
+    <div class="cursor-glow" id="cursor-glow"></div>
+
+    <!-- Kayan Yazı Şeridi (Luxury Ticker) -->
+    <div class="ticker-wrapper">
+        <div class="ticker-content">
+            <span>✦ AURUM PRIVATE SHOWROOM ACTIVE</span>
+            <span>✦ SECURE ARMORED WORLDWIDE DELIVERY</span>
+            <span>✦ EXCLUSIVE 15% QUALITY DISCOUNT APPLIED</span>
+            <span>✦ NEW RARE VINTAGE ACQUISITIONS EVERY WEEK</span>
+            <span>✦ SHOWROOM LIVE: 142 ACTIVE COLLECTORS ONLINE</span>
+            <span>✦ AURUM PRIVATE SHOWROOM ACTIVE</span>
+            <span>✦ SECURE ARMORED WORLDWIDE DELIVERY</span>
+            <span>✦ EXCLUSIVE 15% QUALITY DISCOUNT APPLIED</span>
+            <span>✦ NEW RARE VINTAGE ACQUISITIONS EVERY WEEK</span>
+            <span>✦ SHOWROOM LIVE: 142 ACTIVE COLLECTORS ONLINE</span>
+        </div>
+    </div>
+
+    <!-- Üst Menü / Navbar -->
+    <header class="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo" id="brand-logo">
+                <span class="logo-text">AURUM</span>
+                <span class="logo-subtext">MASTERPIECES</span>
+            </a>
+            
+            <div class="nav-search-container">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <input type="text" id="global-search" placeholder="Sanatçı, tasarımcı, dönem veya başlık ara...">
+            </div>
+
+            <nav class="nav-actions">
+                <button class="nav-btn" id="favorite-btn" title="Favoriler">
+                    <i class="fa-regular fa-heart"></i>
+                    <span class="badge" id="fav-count">0</span>
+                </button>
+                <button class="nav-btn" id="cart-btn" title="Sepetim">
+                    <i class="fa-solid fa-bag-shopping"></i>
+                    <span class="badge" id="cart-count">0</span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Bölümü (Lüks Karşılama Ekranı) -->
+    <section class="hero-section">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <span class="hero-subtitle">CURATED EXCLUSIVES</span>
+            <h1 class="hero-title">Kalitede İndirim</h1>
+            <p class="hero-description">Dünyanın en prestijli galerilerinden ve antikacılarından derlenen, eşi benzeri bulunmayan başyapıtlar. Sınırlı bir süre için %15 özel kâr payı güvencesiyle doğrudan edinin.</p>
+            <div class="hero-scroll-indicator" id="scroll-to-catalog">
+                <span>Koleksiyonu Keşfet</span>
+                <i class="fa-solid fa-chevron-down"></i>
+            </div>
+        </div>
+    </section>
+
+    <!-- Ana İçerik / Katalog -->
+    <main class="main-content" id="catalog-section">
+        <!-- Yatay Kategori Navigasyonu -->
+        <div class="category-tabs">
+            <button class="tab-btn active" data-vertical="all">Tüm Başyapıtlar</button>
+            <button class="tab-btn" data-vertical="furniture"><i class="fa-solid fa-chair"></i> Mobilya</button>
+            <button class="tab-btn" data-vertical="jewelry"><i class="fa-solid fa-gem"></i> Mücevher & Saat</button>
+            <button class="tab-btn" data-vertical="art"><i class="fa-solid fa-palette"></i> Güzel Sanatlar</button>
+            <button class="tab-btn" data-vertical="other"><i class="fa-solid fa-wand-magic-sparkles"></i> Diğer Koleksiyonlar</button>
+        </div>
+
+        <div class="catalog-layout">
+            <!-- Sol Kenar - Detaylı Filtre Paneli -->
+            <aside class="filter-sidebar">
+                <div class="filter-header">
+                    <h3><i class="fa-solid fa-sliders"></i> Filtreler</h3>
+                    <button id="clear-filters-btn" class="clear-btn">Temizle</button>
+                </div>
+                
+                <div class="filter-group">
+                    <h4>Fiyat Aralığı (USD)</h4>
+                    <div class="price-slider-container">
+                        <div class="price-inputs">
+                            <span id="price-min-label">$0</span>
+                            <span id="price-max-label">$15,000,000</span>
+                        </div>
+                        <input type="range" id="price-slider" min="0" max="12000000" step="50000" value="12000000">
+                        <div class="slider-hint">En fazla: <span id="current-price-limit">$12,000,000</span></div>
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    <h4>Tasarımcı / Yaratıcı</h4>
+                    <select id="filter-creator" class="filter-select">
+                        <option value="all">Tümü</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <h4>Tarz / Stil</h4>
+                    <select id="filter-style" class="filter-select">
+                        <option value="all">Tümü</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <h4>Dönem</h4>
+                    <select id="filter-period" class="filter-select">
+                        <option value="all">Tümü</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <h4>Menşei (Ülke)</h4>
+                    <select id="filter-origin" class="filter-select">
+                        <option value="all">Tümü</option>
+                    </select>
+                </div>
+                
+                <div class="aurum-guarantee">
+                    <i class="fa-solid fa-circle-check gold-icon"></i>
+                    <div>
+                        <h5>Aurum Güvencesi</h5>
+                        <p>Tüm ürünler uzmanlarımız tarafından orijinallik ve durum raporu testlerinden geçirilmiştir.</p>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Sağ Taraf - Ürün Listesi Grid -->
+            <section class="products-container">
+                <div class="products-toolbar">
+                    <span class="product-count" id="product-count-label">58 Seçkin Eser Gösteriliyor</span>
+                    <div class="sort-container">
+                        <label for="sort-select">Sırala:</label>
+                        <select id="sort-select" class="sort-select">
+                            <option value="price-desc">Fiyat: Yüksekten Alçağa</option>
+                            <option value="price-asc">Fiyat: Alçaktan Yükseğe</option>
+                            <option value="title-asc">İsim: A - Z</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Grid Başlangıcı -->
+                <div class="products-grid" id="products-grid">
+                    <!-- Kartlar JavaScript ile buraya yüklenecektir -->
+                    <div class="loader-container">
+                        <div class="aurum-spinner"></div>
+                        <p>Nadir eserler yükleniyor...</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Ürün Detay Modalı (Gelişmiş Popup) -->
+    <div class="modal-overlay" id="product-modal">
+        <div class="modal-content-wrapper">
+            <button class="modal-close-btn" id="modal-close" title="Kapat"><i class="fa-solid fa-xmark"></i></button>
+            
+            <div class="product-modal-body">
+                <!-- Sol Taraf: Resim Carousel ve Thumbnail Listesi -->
+                <div class="modal-gallery-pane">
+                    <div class="modal-main-image-container">
+                        <img id="modal-main-img" src="" alt="Ürün Resmi">
+                        <button class="gallery-nav-btn prev" id="gallery-prev"><i class="fa-solid fa-chevron-left"></i></button>
+                        <button class="gallery-nav-btn next" id="gallery-next"><i class="fa-solid fa-chevron-right"></i></button>
+                    </div>
+                    <div class="modal-thumbnails" id="modal-thumbnails-container">
+                        <!-- Küçük resimler buraya eklenecektir -->
+                    </div>
+                </div>
+                
+                <!-- Sağ Taraf: Detaylı Bilgiler -->
+                <div class="modal-details-pane">
+                    <span class="modal-category" id="modal-vertical">FURNITURE</span>
+                    <h2 class="modal-title" id="modal-title">Ürün Başlığı Yükleniyor...</h2>
+                    
+                    <div class="modal-price-box">
+                        <div class="price-retail-label">Satış Fiyatı (%15 Karlı)</div>
+                        <div class="modal-price" id="modal-price">$0</div>
+                        <div class="modal-original-price" id="modal-original-price">Piyasa Değeri: $0</div>
+                    </div>
+                    
+                    <div class="modal-description-box">
+                        <h3>Açıklama</h3>
+                        <p id="modal-description">Açıklama yükleniyor...</p>
+                    </div>
+                    
+                    <div class="modal-specs-box">
+                        <h3>Detaylı Özellikler</h3>
+                        <table class="specs-table" id="modal-specs-table">
+                            <!-- Özellik tablosu buraya dinamik eklenecektir -->
+                        </table>
+                    </div>
+
+                    <div class="modal-actions-box">
+                        <button class="btn btn-primary btn-large" id="modal-add-to-cart">
+                            <i class="fa-solid fa-bag-shopping"></i> SEPETE EKLE
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sepet Çekmecesi (Cart Drawer - Sağdan Açılır) -->
+    <div class="drawer-overlay" id="cart-drawer">
+        <div class="drawer-container">
+            <div class="drawer-header">
+                <h3><i class="fa-solid fa-bag-shopping gold-icon"></i> Sepetim</h3>
+                <button class="drawer-close-btn" id="cart-drawer-close"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            
+            <div class="drawer-body" id="cart-items-container">
+                <!-- Sepet Elemanları buraya eklenecektir -->
+            </div>
+            
+            <div class="drawer-footer">
+                <div class="cart-totals">
+                    <div class="total-row">
+                        <span>Ara Toplam</span>
+                        <span id="cart-subtotal">$0</span>
+                    </div>
+                    <div class="total-row delivery">
+                        <span>Özel Sigortalı Kurye Teslimatı</span>
+                        <span class="gold-text">ÜCRETSİZ</span>
+                    </div>
+                    <div class="total-row final-total">
+                        <span>Toplam</span>
+                        <span id="cart-total">$0</span>
+                    </div>
+                </div>
+                <button class="btn btn-primary btn-full" id="checkout-btn">GÜVENLİ ÖDEMEYE GEÇ</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ödeme Çekmecesi (Checkout Drawer - Sağdan Açılır) -->
+    <div class="drawer-overlay" id="checkout-drawer">
+        <div class="drawer-container">
+            <div class="drawer-header">
+                <h3><i class="fa-solid fa-shield-halved gold-icon"></i> Güvenli Ödeme</h3>
+                <button class="drawer-close-btn" id="checkout-drawer-close"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            
+            <div class="drawer-body">
+                <div class="checkout-summary-compact">
+                    <h4>Sipariş Özeti</h4>
+                    <div class="total-row">
+                        <span id="checkout-items-count">0 Ürün</span>
+                        <strong id="checkout-total-price" class="gold-text">$0</strong>
+                    </div>
+                </div>
+
+                <form id="checkout-form" class="checkout-form">
+                    <h4>1. Teslimat Adresi</h4>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="c-name">Ad Soyad</label>
+                            <input type="text" id="c-name" required placeholder="John Doe">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="c-email">E-posta</label>
+                            <input type="email" id="c-email" required placeholder="john@example.com">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="c-address">Adres</label>
+                            <textarea id="c-address" required placeholder="Teslimat adresi..."></textarea>
+                        </div>
+                    </div>
+
+                    <h4>2. Ödeme Bilgileri (Demo Modu)</h4>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="card-number">Kart Numarası</label>
+                            <div class="input-icon-wrapper">
+                                <i class="fa-solid fa-credit-card input-icon"></i>
+                                <input type="text" id="card-number" required placeholder="4000 1234 5678 9010" maxlength="19">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row split">
+                        <div class="form-group">
+                            <label for="card-expiry">Son Kul. Tarihi</label>
+                            <input type="text" id="card-expiry" required placeholder="MM/YY" maxlength="5">
+                        </div>
+                        <div class="form-group">
+                            <label for="card-cvc">CVC</label>
+                            <input type="password" id="card-cvc" required placeholder="123" maxlength="3">
+                        </div>
+                    </div>
+
+                    <div class="secure-payment-badge">
+                        <i class="fa-solid fa-lock secure-icon"></i>
+                        <span>Ödemeniz 256-bit SSL şifreleme ile güvendedir. Bu ödeme sistemi placeholder modundadır.</span>
+                    </div>
+
+                    <button type="submit" class="btn btn-gold btn-full" id="place-order-btn">
+                        ÖDEMEYİ TAMAMLA
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Başarılı Ödeme Ekranı Modalı -->
+    <div class="modal-overlay" id="success-modal">
+        <div class="success-card">
+            <div class="success-icon">
+                <i class="fa-solid fa-circle-check"></i>
+            </div>
+            <h2>Siparişiniz Başarıyla Alındı</h2>
+            <p>Eşsiz başyapıtınız adınıza rezerve edildi. Kişisel sanat danışmanınız teslimat ve lojistik detayları için en kısa sürede sizinle iletişime geçecektir.</p>
+            <div class="order-details-box">
+                <div>Sipariş No: <strong id="success-order-id">#AUR-9284102</strong></div>
+                <div>Toplam Tutar: <strong id="success-order-total" class="gold-text">$0</strong></div>
+            </div>
+            <button class="btn btn-primary" id="success-continue-btn">Alışverişe Devam Et</button>
+        </div>
+    </div>
+
+    <!-- Canlı Satış Bildirim Penceresi -->
+    <div class="sales-notification" id="sales-notification"></div>
+
+    <!-- Alt Bilgi / Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <h2>AURUM</h2>
+                <p>Nadir ve seçkin eserlerin küresel adresi.</p>
+            </div>
+            <div class="footer-info">
+                <p>&copy; 2026 AURUM. Tüm hakları saklıdır. Saturday Sale replika projesidir.</p>
+                <p class="gold-text"><i class="fa-solid fa-shield"></i> Premium Alışveriş Güvencesi</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Supabase JS CDN (Eğer bağlantı verilirse kullanılacak) -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- Uygulama JavaScript Dosyası -->
+    <script src="app.js"></script>
+</body>
+</html>

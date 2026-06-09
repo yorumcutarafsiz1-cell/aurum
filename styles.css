@@ -1471,13 +1471,29 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Responsive Styles */
 @media (max-width: 1024px) {
-    .catalog-layout {
-        grid-template-columns: 1fr;
-        gap: 20px;
+    .main-content {
+        display: flex;
+        flex-direction: column;
     }
     
     .mobile-filter-btn {
         display: flex;
+        order: 1;
+        margin-bottom: 16px;
+    }
+    
+    .category-tabs {
+        order: 2;
+        margin-bottom: 24px;
+        justify-content: flex-start;
+        padding-bottom: 10px;
+    }
+    
+    .catalog-layout {
+        display: flex;
+        flex-direction: column;
+        order: 3;
+        gap: 20px;
     }
     
     .filter-sidebar {
@@ -1486,11 +1502,16 @@ h1, h2, h3, h4, h5, h6 {
         position: static;
         margin-bottom: 20px;
         box-shadow: none;
+        order: 1;
     }
     
     .filter-sidebar.active {
         display: block;
         animation: slideDown 0.3s ease-out;
+    }
+    
+    .products-container {
+        order: 2;
     }
     
     .product-modal-body {

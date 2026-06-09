@@ -1,20 +1,20 @@
-/* AURUM Modern Metallic Dark Luxury Design System */
+/* AURUM Modern Slate-Titanium Metallic Luxury Design System */
 
 :root {
-    --bg-primary: #121316;
-    --bg-secondary: #1a1c22;
-    --bg-tertiary: #252830;
+    --bg-primary: #20222a;
+    --bg-secondary: #262a35;
+    --bg-tertiary: #2f3442;
     --accent-gold: #d4af37;
     --accent-gold-rgb: 212, 175, 55;
     --accent-gold-hover: #f5d77f;
-    --text-primary: #f5f6fa;
-    --text-secondary: #a0a5b5;
-    --text-muted: #6b7082;
-    --border-color: rgba(255, 255, 255, 0.06);
-    --border-glow: rgba(212, 175, 55, 0.25);
-    --glass-bg: rgba(26, 28, 34, 0.85);
-    --glass-border: rgba(255, 255, 255, 0.08);
-    --shadow-gold: 0 12px 40px 0 rgba(0, 0, 0, 0.35);
+    --text-primary: #f8f9fc;
+    --text-secondary: #cbd1e0;
+    --text-muted: #8b92a5;
+    --border-color: rgba(255, 255, 255, 0.1);
+    --border-glow: rgba(212, 175, 55, 0.3);
+    --glass-bg: rgba(38, 42, 53, 0.88);
+    --glass-border: rgba(255, 255, 255, 0.15);
+    --shadow-gold: 0 16px 48px 0 rgba(0, 0, 0, 0.4);
     --transition-smooth: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
@@ -27,7 +27,7 @@
 }
 
 body {
-    background: linear-gradient(135deg, #2c2e37 0%, #17181e 50%, #0a0b0d 100%) fixed;
+    background: linear-gradient(135deg, #525866 0%, #282b35 50%, #15171e 100%) fixed;
     color: var(--text-primary);
     font-family: 'Plus Jakarta Sans', sans-serif;
     overflow-x: hidden;
@@ -188,7 +188,7 @@ h1, h2, h3, h4, h5, h6 {
     align-items: center;
     justify-content: center;
     text-align: center;
-    background: radial-gradient(circle at center, #353846 0%, #17181e 80%);
+    background: radial-gradient(circle at center, #5c6273 0%, #282b35 80%);
     padding: 0 20px;
     margin-top: 76px;
     border-bottom: 1px solid var(--border-color);
